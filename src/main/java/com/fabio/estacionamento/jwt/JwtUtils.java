@@ -1,5 +1,7 @@
 package com.fabio.estacionamento.jwt;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,9 +29,10 @@ public class JwtUtils {
     }
 
     // método que prepara a chave secreta para a criptografia
-    private static Key getSecretKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8)); // retorna a chave secreta
+    private static javax.crypto.SecretKey generateKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8)); // gera a chave secreta
     }
+
 
     //método que faz o cáuculo entre a data que o token foi criado e a data que deve ser expirado
     private static Date toExpireDate (Date start) {
@@ -37,4 +40,21 @@ public class JwtUtils {
         LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES); // adiciona os dias, horas e minutos
         return Date.from(end.atZone(ZoneId.systemDefault()).toInstant()); // retorna a data final
     }
+
+    //método que vai gerar o token
+    public static JwtToken createToken(String username, String role) {
+        Date issuedAt = new Date(); // data de criação do token
+        Date limit = toExpireDate(issuedAt); // data de expiração do token
+        String token = Jwts.builder() // cria o token
+                .header().add("typ", "JWT")// adiciona o tipo do token
+                .and()
+                .subject(username) // adiciona o usuário
+                .issuedAt(issuedAt) // adiciona a data de criação
+                .expiration(limit) // adiciona a data de expiração
+                .signWith(generateKey()) // adiciona a chave secreta
+                .claim("role", role) // adiciona a regra
+                .compact();
+        return new JwtToken(token);
+    }
+
 }
