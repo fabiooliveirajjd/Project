@@ -1,5 +1,7 @@
 package com.fabio.estacionamento.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -56,5 +58,41 @@ public class JwtUtils {
                 .compact();
         return new JwtToken(token);
     }
+
+    private static Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(generateKey())
+                    .build()
+                    .parseSignedClaims(refectorToken(token)).getPayload();
+        } catch (JwtException ex) {
+            log.error(String.format("Token invalido %s", ex.getMessage()));
+        }
+        return null;
+    }
+
+
+    //método que vai retornar o usuário do token
+    public static boolean isTokenValid(String token) {
+        try {
+            Jwts.parser() // faz a verificação do token
+                    .verifyWith(generateKey()) // verifica com a chave secreta
+                    .build()
+                    .parseSignedClaims(refectorToken(token)); // faz o parse do token
+            return true;
+        } catch (JwtException ex) {
+            log.error(String.format("Token invalido %s", ex.getMessage())); // loga o erro
+        }
+        return false;
+    }
+
+    //método que remove o Bearer do token
+    private static String refectorToken(String token) {
+        if (token.contains(JWT_BEARER)) { // verifica se o token contém o Bearer
+            return token.substring(JWT_BEARER.length()); // remove o Bearer
+        }
+        return token;
+    }
+
 
 }
