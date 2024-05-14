@@ -59,4 +59,9 @@ public class UsuarioService {
                 () -> new EntityNotFoundException(String.format("Usuário com '%s' não encontrado", username))
         );
     }
+
+    @Transactional(readOnly = true)
+    public Usuario.Role buscarRolePorUsername(String username) {
+        return usuarioRepository.findRoleByUsername(username);
+    }
 }
