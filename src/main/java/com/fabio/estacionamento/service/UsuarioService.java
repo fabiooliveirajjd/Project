@@ -17,7 +17,7 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional // essa anotação indica que o método irá realizar operações de escrita no banco de dados.
     public Usuario salvar(Usuario usuario) {
