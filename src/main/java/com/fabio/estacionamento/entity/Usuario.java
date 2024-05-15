@@ -3,6 +3,11 @@ package com.fabio.estacionamento.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,6 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "usuarios")
+@EntityListeners(AuditingEntityListener.class)
 public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +31,16 @@ public class Usuario implements Serializable {
     @Column(name = "role", nullable = false, length = 25) // role não pode ser nulo e tem tamanho 25
     private Role role = Role.ROLE_CLIENTE; // role padrão é cliente
 
+    @CreatedDate // Anotação para data de criação
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao; //hora do momento que o usuario foi criado
+    @LastModifiedDate //
     @Column(name = "data_modificacao")
     private LocalDateTime dataModificacao; // hora do momento que o usuario foi modificado
+    @CreatedBy
     @Column(name = "criado_por")
     private String criadoPor; // quem criou o usuario
+    @LastModifiedBy
     @Column(name = "modificado_por")
     private String modificadoPor; // quem modificou o usuario
 
