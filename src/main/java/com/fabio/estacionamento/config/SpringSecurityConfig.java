@@ -1,18 +1,20 @@
 package com.fabio.estacionamento.config;
 
+import com.fabio.estacionamento.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.fabio.estacionamento.jwt.JwtAuthorizationFilter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebMvc
 @Configuration // indica que a classe é uma classe de configuração
@@ -20,24 +22,27 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SpringSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable()) // desabilita o csrf
-                .formLogin(form -> form.disable()) // desabilita o formulario de login
-                .httpBasic(basic -> basic.disable()) // desabilita o http basic authentication
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll() // permite o acesso ao endpoint de cadastro de usuários
-                        .anyRequest().authenticated() // qualquer outra requisição deve ser autenticada
+                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
+                        .anyRequest().authenticated()
                 ).sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // desabilita o uso de sessão
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).addFilterBefore(
+                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
                 ).build();
     }
+
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder (){
