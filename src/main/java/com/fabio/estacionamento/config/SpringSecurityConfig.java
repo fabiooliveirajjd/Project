@@ -2,6 +2,7 @@ package com.fabio.estacionamento.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.fabio.estacionamento.jwt.JwtAuthorizationFilter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,6 +32,12 @@ public class SpringSecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // desabilita o uso de sessão
                 ).build();
     }
+
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter();
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder (){
