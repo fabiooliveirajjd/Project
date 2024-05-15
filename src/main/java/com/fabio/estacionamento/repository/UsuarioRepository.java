@@ -10,6 +10,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByUsername(String username);
 
     // não pode ser feita com palavra chave findBy, pois não é um atributo do objeto Usuario
+    //SELECT u.role FROM estacionamento.usuarios u
+    //WHERE u.username LIKE 'fabio@mail.com';
     @Query("SELECT u.role FROM Usuario u WHERE u.username like :username")
     Usuario.Role findRoleByUsername(String username);
 

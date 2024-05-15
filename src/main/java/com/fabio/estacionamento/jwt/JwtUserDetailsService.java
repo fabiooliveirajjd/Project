@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
+@Service
 // UserDetailsService é uma classe do Spring Security que é usada para localizar um usuários no banco de dados
-public class JwtuserDetailsService implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService {
 
     private final UsuarioService usuarioService;
 
@@ -20,9 +22,9 @@ public class JwtuserDetailsService implements UserDetailsService {
         return new JwtUserDatails(usuario); //recuperado do banco de dados
     }
 
-    // Método para gerar um token JWT
+    // Método para fazer a consulta pelo nome do usuário e retornar o token
     public JwtToken getTokenAuthenticated(String username) {
-        Usuario.Role role = usuarioService.buscarRolePorUsername(username); //recuperado do banco de dados
-        return JwtUtils.createToken(username, role.name().substring("ROLE_".length())); // gera o token
+        Usuario.Role role = usuarioService.buscarRolePorUsername(username);
+        return JwtUtils.createToken(username, role.name().substring("ROLE_".length()));
     }
 }
