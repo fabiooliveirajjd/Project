@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ public class AutenticacaoController {
      *  se existir retorna um objeto authenticationToken e adicona esse objeto como parte do contexto do spring security
      *  pelo método autenticatede, caso contrário, retorna uma exceção de autenticação, se passar, cai no bloco try e cria o token.
      */
+    @PostMapping("/auth")
     public ResponseEntity<?> autenticar (@RequestBody @Valid UsuarioLoginDto dto, HttpServletRequest request) {
         log.info("processo de autenticação pelo login {}", dto.getUsername());
         try{
