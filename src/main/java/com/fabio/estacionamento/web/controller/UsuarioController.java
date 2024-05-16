@@ -53,7 +53,8 @@ public class UsuarioController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @GetMapping("/{id}") // Método para recuperar um usuário pelo id
-    @PreAuthorize("hasRole('ADMIN')") // Apenas usuários com a role de admin podem acessar essa rota
+    // Somente o ADMIN ou o próprio usuário podem acessar o recurso
+    @PreAuthorize("hasRole('ADMIN') OR  (hasRole ('CLIENTE') AND #id == authentication.principal.id )")
     public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
         Usuario user = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toDto(user));
