@@ -14,8 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
 @Configuration // indica que a classe é uma classe de configuração
@@ -25,9 +25,9 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // desabilita o csrf
-                .formLogin(AbstractHttpConfigurer::disable) // desabilita o form login
-                .httpBasic(AbstractHttpConfigurer::disable) // desabilita o http basic
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth // configura as autorizações
                         .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll() // permite o acesso a rota de cadastro de usuários para qualquer um
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll() // permite o acesso a rota de autenticação para qualquer um
@@ -37,7 +37,7 @@ public class SpringSecurityConfig {
                 ).addFilterBefore(
                         jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class // adiciona o filtro de autorização
                 ).exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // configura o entry point de autenticação
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 ).build();
     }
 

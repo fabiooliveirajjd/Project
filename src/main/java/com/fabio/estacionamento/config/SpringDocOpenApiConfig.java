@@ -22,4 +22,5 @@ public class SpringDocOpenApiConfig {
                                 .contact(new Contact().name("Fábio Oliveira").email("fabiooliveirajjd@gmail.com"))
                 );
     }
+
 }
