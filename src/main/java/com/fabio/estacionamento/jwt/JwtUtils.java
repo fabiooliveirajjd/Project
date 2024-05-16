@@ -14,7 +14,7 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    //Constantes que serão usadas no projeto
+    // constantes que serão usadas no projeto
     public static final String JWT_BEARER = "Bearer "; // Bearer é o tipo de autenticação
     public static final String JWT_AUTHORIZATION = "Authorization"; // Authorization é o cabeçalho da requisição
 
@@ -22,9 +22,9 @@ public class JwtUtils {
     public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
     public static final long EXPIRE_DAYS = 0; // tempo de expiração do token em dias
     public static final long EXPIRE_HOURS = 0; // tempo de expiração do token em horas
-    public static final long EXPIRE_MINUTES = 2; // tempo de expiração do token em minutos
+    public static final long EXPIRE_MINUTES = 15; // tempo de expiração do token em minutos
 
-    //construtor privado para garantir que a classe não seja instanciada
+    // construtor privado para garantir que a classe não seja instanciada
     private JwtUtils() {
     }
 
@@ -34,14 +34,14 @@ public class JwtUtils {
     }
 
 
-    //método que faz o cáuculo entre a data que o token foi criado e a data que deve ser expirado
+    // método que faz o cáuculo entre a data que o token foi criado e a data que deve ser expirado
     private static Date toExpireDate(Date start) {
         LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); // converte a data para LocalDateTime definidas na config
         LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES); // adiciona os dias, horas e minutos
         return Date.from(end.atZone(ZoneId.systemDefault()).toInstant()); // retorna a data final
     }
 
-    //método que vai gerar o token
+    // método que vai gerar o token
     public static JwtToken createToken(String username, String role) {
         Date issuedAt = new Date(); // data de criação do token
         Date limit = toExpireDate(issuedAt); // data de expiração do token
@@ -74,7 +74,7 @@ public class JwtUtils {
     }
 
 
-    //método que vai retornar o usuário do token
+    // método que vai retornar o usuário do token
     public static boolean isTokenValid(String token) {
         try {
             Jwts.parser() // faz a verificação do token
@@ -88,7 +88,7 @@ public class JwtUtils {
         return false;
     }
 
-    //método que remove o Bearer do token
+    // método que remove o Bearer do token
     private static String refectorToken(String token) {
         if (token.contains(JWT_BEARER)) { // verifica se o token contém o Bearer
             return token.substring(JWT_BEARER.length()); // remove o Bearer

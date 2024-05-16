@@ -33,7 +33,7 @@ public class Usuario implements Serializable {
 
     @CreatedDate // Anotação para data de criação
     @Column(name = "data_criacao")
-    private LocalDateTime dataCriacao; //hora do momento que o usuario foi criado
+    private LocalDateTime dataCriacao; // hora do momento que o usuario foi criado
     @LastModifiedDate //
     @Column(name = "data_modificacao")
     private LocalDateTime dataModificacao; // hora do momento que o usuario foi modificado

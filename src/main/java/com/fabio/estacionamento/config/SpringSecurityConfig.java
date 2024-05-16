@@ -24,31 +24,32 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
-                        .anyRequest().authenticated()
+                .csrf(AbstractHttpConfigurer::disable) // desabilita o csrf
+                .formLogin(AbstractHttpConfigurer::disable) // desabilita o form login
+                .httpBasic(AbstractHttpConfigurer::disable) // desabilita o http basic
+                .authorizeHttpRequests(auth -> auth // configura as autorizações
+                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll() // permite o acesso a rota de cadastro de usuários para qualquer um
+                        .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll() // permite o acesso a rota de autenticação para qualquer um
+                        .anyRequest().authenticated() // qualquer outra requisição precisa de autenticação
                 ).sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // configura a política de sessão para stateless
                 ).addFilterBefore(
-                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
+                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class // adiciona o filtro de autorização
                 ).build();
     }
 
-
+    // Esse método retorna uma instância de JwtAuthorizationFilter
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter();
     }
-
+    // Esse método criptografa a senha do usuário no banco de dados
     @Bean
     public PasswordEncoder passwordEncoder (){
         return new BCryptPasswordEncoder(); // Método que criptografa a senha
     }
 
+    // Esse método retorna uma instância de AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

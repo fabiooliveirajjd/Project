@@ -21,7 +21,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private JwtUserDetailsService detailsService;
 
 
-    //Método que interceptas as requisições e verifica se o token é válido
+    // Método que interceptas as requisições e verifica se o token é válido
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
