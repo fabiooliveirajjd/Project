@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@Tag(name = "Autenticação", description = "Recurso para proceder com a autenticação na API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
@@ -39,7 +41,15 @@ public class AutenticacaoController {
      *  se existir retorna um objeto authenticationToken e adicona esse objeto como parte do contexto do spring security
      *  pelo método autenticatede, caso contrário, retorna uma exceção de autenticação, se passar, cai no bloco try e cria o token.
      */
-    @Operation(summary = "Autenticar um usuário", description = "Recurso para autenticar um usuário")
+    @Operation(summary = "Autenticar na API", description = "Recurso de autenticação na API",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Autenticação realizada com sucesso e retorno de um bearer token",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Credenciais inválidas",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campo(s) Inválido(s)",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PostMapping("/auth")
     public ResponseEntity<?> autenticar (@RequestBody @Valid UsuarioLoginDto dto, HttpServletRequest request) {
         log.info("processo de autenticação pelo login {}", dto.getUsername());
