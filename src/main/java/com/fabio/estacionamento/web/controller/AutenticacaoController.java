@@ -3,7 +3,12 @@ package com.fabio.estacionamento.web.controller;
 import com.fabio.estacionamento.jwt.JwtToken;
 import com.fabio.estacionamento.jwt.JwtUserDetailsService;
 import com.fabio.estacionamento.web.dto.UsuarioLoginDto;
+import com.fabio.estacionamento.web.dto.UsuarioResponseDto;
 import com.fabio.estacionamento.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +39,7 @@ public class AutenticacaoController {
      *  se existir retorna um objeto authenticationToken e adicona esse objeto como parte do contexto do spring security
      *  pelo método autenticatede, caso contrário, retorna uma exceção de autenticação, se passar, cai no bloco try e cria o token.
      */
+    @Operation(summary = "Autenticar um usuário", description = "Recurso para autenticar um usuário")
     @PostMapping("/auth")
     public ResponseEntity<?> autenticar (@RequestBody @Valid UsuarioLoginDto dto, HttpServletRequest request) {
         log.info("processo de autenticação pelo login {}", dto.getUsername());
