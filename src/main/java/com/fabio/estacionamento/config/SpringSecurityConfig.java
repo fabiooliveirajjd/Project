@@ -1,5 +1,6 @@
 package com.fabio.estacionamento.config;
 
+import com.fabio.estacionamento.jwt.JwtAuthenticationEntryPoint;
 import com.fabio.estacionamento.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,8 @@ public class SpringSecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // configura a política de sessão para stateless
                 ).addFilterBefore(
                         jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class // adiciona o filtro de autorização
+                ).exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // configura o entry point de autenticação
                 ).build();
     }
 
