@@ -22,6 +22,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableMethodSecurity // habilita a segurança baseada em anotações
 public class SpringSecurityConfig {
 
+    private static final String[] DOCUMENTATION_OPENAPI = {
+            "/docs/index.html",
+            "/docs-estacionamento.html", "/docs-estacionamento/**",
+            "/v3/api-docs/**",
+            "/swagger-ui-custom.html", "/swagger-ui.html", "/swagger-ui/**",
+            "/**.html", "/webjars/**", "/configuration/**", "/swagger-resources/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -31,6 +39,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth // configura as autorizações
                         .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll() // permite o acesso a rota de cadastro de usuários para qualquer um
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll() // permite o acesso a rota de autenticação para qualquer um
+                        .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated() // qualquer outra requisição precisa de autenticação
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // configura a política de sessão para stateless
