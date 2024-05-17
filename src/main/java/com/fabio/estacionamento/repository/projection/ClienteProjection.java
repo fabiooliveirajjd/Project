@@ -1,4 +1,4 @@
-package com.fabio.estacionamento.repository;
+package com.fabio.estacionamento.repository.projection;
 
 public interface ClienteProjection {
 

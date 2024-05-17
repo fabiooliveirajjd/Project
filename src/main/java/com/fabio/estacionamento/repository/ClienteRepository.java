@@ -1,6 +1,7 @@
 package com.fabio.estacionamento.repository;
 
 import com.fabio.estacionamento.entity.Cliente;
+import com.fabio.estacionamento.repository.projection.ClienteProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
