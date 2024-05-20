@@ -5,7 +5,6 @@ import com.fabio.estacionamento.jwt.JwtUserDatails;
 import com.fabio.estacionamento.repository.projection.FuncionarioProjection;
 import com.fabio.estacionamento.service.FuncionarioService;
 import com.fabio.estacionamento.service.UsuarioService;
-import com.fabio.estacionamento.web.dto.ClienteResponseDto;
 import com.fabio.estacionamento.web.dto.FuncionarioCreateDto;
 import com.fabio.estacionamento.web.dto.FuncionarioResponseDto;
 import com.fabio.estacionamento.web.dto.PageableDto;
@@ -135,7 +134,7 @@ public class FuncionarioController {
             })
     @GetMapping("/detalhes")
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<FuncionarioResponseDto> getDetalhes (@AuthenticationPrincipal JwtUserDatails userDetails) {
+    public ResponseEntity<FuncionarioResponseDto> getDetalhes(@AuthenticationPrincipal JwtUserDatails userDetails) {
         Funcionario funcionario = funcionarioService.buscarPorUsuarioId(userDetails.getId());
         return ResponseEntity.ok(FuncionarioMapper.toDto(funcionario));
     }
