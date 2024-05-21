@@ -12,7 +12,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+// Essa é a classe de relacionamento entre as entidades Cliente e Vaga
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "clientes_tem_vagas")
 @EntityListeners(AuditingEntityListener.class)
@@ -21,7 +24,7 @@ public class ClienteVaga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "numero_recibo", nullable = false, unique = true, length = 15)
+    @Column(name = "numero_recibo", nullable = false, unique = true, length = 15) // obrigatório, único e com no máximo 15 caracteres
     private String recibo;
     @Column(name = "placa", nullable = false, length = 8)
     private String placa;
@@ -35,17 +38,18 @@ public class ClienteVaga {
     private LocalDateTime dataEntrada;
     @Column(name = "data_saida")
     private LocalDateTime dataSaida;
-    @Column(name = "valor", columnDefinition = "decimal(7,2)")
+    @Column(name = "valor", columnDefinition = "decimal(7,2)") // valor com 7 dígitos e 2 decimais
     private BigDecimal valor;
-    @Column(name = "desconto", columnDefinition = "decimal(7,2)")
+    @Column(name = "desconto", columnDefinition = "decimal(7,2)") // desconto com 7 dígitos e 2 decimais
     private BigDecimal desconto;
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente", nullable = false) // Relacionamento muitos para um com a tabela clientes
     private Cliente cliente;
     @ManyToOne
-    @JoinColumn(name = "id_vaga", nullable = false)
+    @JoinColumn(name = "id_vaga", nullable = false) // Relacionamento muitos para um com a tabela vagas
     private Vaga vaga;
 
+    // Campos de auditoria
     @CreatedDate
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
